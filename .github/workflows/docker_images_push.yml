@@ -1,0 +1,52 @@
+name: Build and Push to Artifact Registry
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+env:
+  PROJECT_ID: karthik-gcp-learnings
+  REGION: asia-south1
+  GAR_LOCATION: asia-south1-docker.pkg.dev/karthik-gcp-learnings/dk-hcl-hackathon/
+
+jobs:
+  build-push-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+
+      - id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+            credentials_json: "${{ secrets.DK_HCP_User_SERVICE_ACCOUNT_KEY }}"
+
+      - name: "Set up Cloud SDK"
+        uses: "google-github-actions/setup-gcloud@v1"
+
+      - name: "Use gcloud CLI"
+        run: "gcloud info"
+
+      - name: "Docker auth"
+        run: |-
+          gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev --quiet
+
+      - name: Build application-service image
+        run: docker build . --file /workspaces/dk-hcl-hackathon/application-service/Dockerfile --tag ${{ vars.GAR_LOCATION }}application-service:latest
+
+      - name: Build patient-service image
+        run: docker build . --file /workspaces/dk-hcl-hackathon/patient-service/Dockerfile --tag ${{ vars.GAR_LOCATION }}patient-service:latest
+
+      - name: Build order-service image
+        run: docker build . --file /workspaces/dk-hcl-hackathon/order-service/Dockerfile --tag ${{ vars.GAR_LOCATION }}order-service:latest
+
+      - name: Push application-service image
+        run: docker push ${{ vars.GAR_LOCATION }}application-service:latest
+
+      - name: Push patient-service image
+        run: docker push ${{ vars.GAR_LOCATION }}patient-service:latest
+
+      - name: Push order-service image
+        run: docker push ${{ vars.GAR_LOCATION }}order-service:latest
