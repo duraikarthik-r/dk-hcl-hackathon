@@ -34,13 +34,13 @@ jobs:
           gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev --quiet
 
       - name: Build application-service image
-        run: docker build . --file ../workspaces/dk-hcl-hackathon/application-service/Dockerfile --tag ${{ vars.GAR_LOCATION }}application-service:latest
+        run: docker build . --file application-service/Dockerfile --tag ${{ vars.GAR_LOCATION }}application-service:latest
 
       - name: Build patient-service image
-        run: docker build . --file ../workspaces/dk-hcl-hackathon/patient-service/Dockerfile --tag ${{ vars.GAR_LOCATION }}patient-service:latest
+        run: docker build . --file patient-service/Dockerfile --tag ${{ vars.GAR_LOCATION }}patient-service:latest
 
       - name: Build order-service image
-        run: docker build . --file ../workspaces/dk-hcl-hackathon/order-service/Dockerfile --tag ${{ vars.GAR_LOCATION }}order-service:latest
+        run: docker build . --file order-service/Dockerfile --tag ${{ vars.GAR_LOCATION }}order-service:latest
 
       - name: Push application-service image
         run: docker push ${{ vars.GAR_LOCATION }}application-service:latest
