@@ -21,7 +21,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18-alpine
+          node-version: 18
+      - run: npm install
+      - run: npm test
 
       - id: "auth"
         uses: "google-github-actions/auth@v1"
