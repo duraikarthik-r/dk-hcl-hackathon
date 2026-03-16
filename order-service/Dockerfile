@@ -1,7 +1,7 @@
 FROM maven:3.9-eclipse-temurin-17 as build
 WORKDIR /usr/src/app
-COPY pom.xml .
-COPY src ./src
+COPY order-service/pom.xml .
+COPY order-service/src ./src
 RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
