@@ -1,7 +1,7 @@
 FROM node:18-alpine AS build
 WORKDIR /usr/src/app
-COPY patient-service/package*.json ./
+COPY package*.json ./
 RUN npm install
-COPY patient-service/. .
+COPY . .
 EXPOSE 3000
 CMD ["node", "src/index.js"]
